@@ -28,7 +28,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         Vector3 move = new Vector3(horizontal, 0, vertical);
-        controller.Move(move * Time.deltaTime * playerSpeed);
+        controller.Move(move.normalized * Time.deltaTime * playerSpeed);
 
         if (move != Vector3.zero)
         {
@@ -44,16 +44,38 @@ public class PlayerMovement : MonoBehaviour
 
         playerVelocity.y += gravityValue * Time.deltaTime;
         controller.Move(playerVelocity * Time.deltaTime);
+
+        SetPlayerPosition();
+    }
+
+    private void SetPlayerPosition()
+    {
+        Player.Instance.currentPosition = transform.position;
+    }
+
+    public void MoveInput(Vector2 newMoveDir)
+    {
+        horizontal = newMoveDir.x;
+        vertical = newMoveDir.y;
     }
 
     public void OnMove(InputValue value)
     {
-        horizontal = value.Get<Vector2>().x;
-        vertical = value.Get<Vector2>().y;
+        MoveInput(value.Get<Vector2>());
+    }
+
+    public void JumpInput(bool newJumpState)
+    {
+        hasJumped = newJumpState;
     }
 
     public void OnJump(InputValue value)
     {
-        hasJumped = value.isPressed;
+        JumpInput(value.isPressed);
+    }
+
+    private void OnApplicationQuit()
+    {
+        SetPlayerPosition();
     }
 }
