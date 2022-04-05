@@ -11,13 +11,13 @@ public static class SaveSystem
         string path = Application.persistentDataPath + "/playerData.hax";
         FileStream stream = new FileStream(path, FileMode.Create);
 
-        SaveData data = new SaveData(player);
+        Com.GCTC.Imprecision.SaveData data = new Com.GCTC.Imprecision.SaveData(player);
 
         formatter.Serialize(stream, data);
         stream.Close();
     }
 
-    public static SaveData LoadPlayer()
+    public static Com.GCTC.Imprecision.SaveData LoadPlayer(string playerId)
     {
         string path = Application.persistentDataPath + "/playerData.hax";
         if (File.Exists(path))
@@ -25,14 +25,19 @@ public static class SaveSystem
             BinaryFormatter formatter = new BinaryFormatter();
             FileStream stream = new FileStream(path, FileMode.Open);
 
-            SaveData data = formatter.Deserialize(stream) as SaveData;
+            Com.GCTC.Imprecision.SaveData data = formatter.Deserialize(stream) as Com.GCTC.Imprecision.SaveData;
             stream.Close();
+
+            if(data.playerId != playerId)
+            {
+                data.playerId = playerId;
+            }
 
             return data;
         }
         else
         {
-            SaveData data = new SaveData();
+            Com.GCTC.Imprecision.SaveData data = new Com.GCTC.Imprecision.SaveData(playerId);
             return data;
         }
     }
