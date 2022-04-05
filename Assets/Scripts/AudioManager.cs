@@ -34,10 +34,10 @@ public class AudioManager : MonoBehaviour
         masterMixer.SetFloat("MusicVol", PreferencesManager.GetMusicVolume());
 
         if (masterSlider != null)
-            PreferencesManager.GetMasterVolume();
+            masterSlider.value = PreferencesManager.GetMasterVolume();
 
         if (musicSlider != null)
-            PreferencesManager.GetMusicVolume();
+            musicSlider.value = PreferencesManager.GetMusicVolume();
     }
 
     public void ChangeSoundVolume(float soundLevel)
